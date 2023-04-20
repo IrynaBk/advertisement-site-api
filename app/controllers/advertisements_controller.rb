@@ -2,9 +2,10 @@ class AdvertisementsController < ApplicationController
   before_action :set_advertisement, only: %i[ show update destroy ]
   before_action :authenticate_request, only: [:update, :destroy, :create]
   before_action :check_correct_user, only: %i[update destroy]
+  
 
   # GET /advertisements
-  def index  # ! чи можна оптимізувати, щоб не витягувати кожного разу всі 
+  def index 
     @advertisements = Advertisement.all
     if params[:location].present? && params[:location]!="all"
       @advertisements = @advertisements.where(location: params[:location])
@@ -13,14 +14,20 @@ class AdvertisementsController < ApplicationController
     if params[:category].present? && params[:category]!="all"
       @advertisements = @advertisements.where(category: params[:category])
     end
+
+    if params[:search].present?
+      @advertisements = Advertisement.filter_by_search(params[:search]).all
+    end
     @advertisements = @advertisements.paginate(page: params[:page], per_page: 12).order('created_at DESC')
+    response.headers['Access-Control-Expose-Headers'] = 'total-pages' # може забрати, скидати джейсоном
+    response.headers['total-pages'] = @advertisements.total_pages.to_s
     render json: @advertisements, except: [:created_at, :updated_at]
   end
 
   # GET /advertisements/1
   def show
     render json: @advertisement , except: [:created_at, :updated_at, :user_id], include:
-    [:user => {:only => [:first_name, :last_name, :id]}]
+    [:user => {:only => [:first_name, :last_name, :username]}]
   end
 
   # POST /advertisements
@@ -57,7 +64,7 @@ class AdvertisementsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def advertisement_params
-      params.require(:advertisement).permit(:title, :description, :location, :category)
+      params.require(:advertisement).permit(:title, :description, :location, :category, :search)
     end
 
     def check_correct_user
