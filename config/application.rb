@@ -25,5 +25,11 @@ module AdsBackend
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use ActionDispatch::Session::CookieStore
+    config.action_dispatch.cookies_same_site_protection = :none
+    config.session_store :cookie_store, key: '_session'
+    config.middleware.use config.session_store, config.session_options
+
   end
 end

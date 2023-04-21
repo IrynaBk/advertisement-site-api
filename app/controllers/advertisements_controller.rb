@@ -1,6 +1,6 @@
 class AdvertisementsController < ApplicationController
   before_action :set_advertisement, only: %i[ show update destroy ]
-  before_action :authenticate_request, except: %i[ index show ]
+  before_action :no_auth_request, only: %i[ create ]
   before_action :check_correct_user, only: %i[update destroy]
   
 
