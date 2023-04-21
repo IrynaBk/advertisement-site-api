@@ -1,6 +1,6 @@
 class AdvertisementsController < ApplicationController
   before_action :set_advertisement, only: %i[ show update destroy ]
-  before_action :authenticate_request, only: [:update, :destroy, :create]
+  before_action :authenticate_request, except: %i[ index show ]
   before_action :check_correct_user, only: %i[update destroy]
   
 
@@ -18,6 +18,10 @@ class AdvertisementsController < ApplicationController
     if params[:search].present?
       @advertisements = Advertisement.filter_by_search(params[:search]).all
     end
+
+    if params[:user_id].present?
+      @advertisements = Advertisement.where(user_id: params[:user_id])
+    end
     @advertisements = @advertisements.paginate(page: params[:page], per_page: 12).order('created_at DESC')
     response.headers['Access-Control-Expose-Headers'] = 'total-pages' # може забрати, скидати джейсоном
     response.headers['total-pages'] = @advertisements.total_pages.to_s
@@ -26,8 +30,9 @@ class AdvertisementsController < ApplicationController
 
   # GET /advertisements/1
   def show
-    render json: @advertisement , except: [:created_at, :updated_at, :user_id], include:
-    [:user => {:only => [:first_name, :last_name, :username]}]
+    ad_json = @advertisement.to_json( except: [:created_at, :updated_at, :user_id], include:
+    [:user => {:only => [:first_name, :last_name, :username]}])
+    render json: {advertisement: ad_json , "is_curr_user": current_user?(@advertisement.user.id)}
   end
 
   # POST /advertisements

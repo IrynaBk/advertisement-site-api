@@ -1,6 +1,5 @@
 class ApplicationController < ActionController::API
-
-
+  
   def not_found
     render json: { error: 'not_found' }
   end
@@ -17,4 +16,9 @@ class ApplicationController < ActionController::API
       render json: { errors: e.message }, status: :unauthorized
     end
   end
+
+  def current_user?(id)
+    return @current_user&.id == id
+  end
+
 end
