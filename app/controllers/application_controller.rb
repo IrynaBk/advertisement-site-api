@@ -9,7 +9,7 @@ class ApplicationController < ActionController::API
   def authenticate_request
     header = request.headers['Authorization']
     header = header.split(' ').last if header
-    if header == "null"
+    if (header == "null" || header== "undefined") && header
       @current_user = nil
     else
       @decoded = JsonWebToken.decode(header)

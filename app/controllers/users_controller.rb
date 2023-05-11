@@ -3,6 +3,7 @@ class UsersController < ApplicationController
   before_action :authenticate_request, except: [:create]
 
 
+
   # GET /users
   def index
     @users = User.all
@@ -11,14 +12,18 @@ class UsersController < ApplicationController
 
   # GET /users/1
   def show
-
-    user_json = @user.to_json( only: [:username, :first_name, :last_name, :email, :id])
-    render json: {user: user_json, is_curr_user: current_user?(@user.id)}
+    user_json = UserSerializer.new(@user).serializable_hash.to_json
+    inner_json = JSON.parse(user_json)['data']['attributes'].to_json
+    render json: {
+      user: inner_json,
+      is_curr_user: current_user?(@user.id)
+    }
   end
 
   # POST /users
   def create
     @user = User.new(user_params)
+    @user.image.attach(params[:image])
     
     if @user.save
       render json: @user, status: :created
@@ -50,7 +55,7 @@ class UsersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.permit(:first_name, :last_name, :email, :username, :password, :password_confirmation)
+      params.permit(:first_name, :last_name, :email, :username, :password, :password_confirmation, :image)
     end
 
     def update_params
