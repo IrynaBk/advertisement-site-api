@@ -31,7 +31,7 @@ class AdvertisementsController < ApplicationController
   # GET /advertisements/1
   def show
     ad_json = @advertisement.to_json( except: [:created_at, :updated_at, :user_id], include:
-    [:user => {:only => [:first_name, :last_name, :username]}])
+    [:user => {:only => [:id, :first_name, :last_name, :username]}])
     render json: {advertisement: ad_json , "is_curr_user": current_user?(@advertisement.user.id)}
   end
 

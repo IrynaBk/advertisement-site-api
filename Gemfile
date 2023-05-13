@@ -28,6 +28,11 @@ gem 'faker', '~> 2.16.0'
 
 gem 'byebug'
 
+gem 'figaro'
+
+gem 'letter_opener'
+
+
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 gem "bcrypt", "~> 3.1.7"
 

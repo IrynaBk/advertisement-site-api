@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_25_072850) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_12_143236) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -53,6 +53,25 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_25_072850) do
     t.index ["user_id"], name: "index_advertisements_on_user_id"
   end
 
+  create_table "chat_rooms", force: :cascade do |t|
+    t.bigint "user1_id"
+    t.bigint "user2_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user1_id"], name: "index_chat_rooms_on_user1_id"
+    t.index ["user2_id"], name: "index_chat_rooms_on_user2_id"
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.bigint "chat_room_id", null: false
+    t.bigint "user_id", null: false
+    t.text "body"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chat_room_id"], name: "index_messages_on_chat_room_id"
+    t.index ["user_id"], name: "index_messages_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
@@ -61,9 +80,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_25_072850) do
     t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "reset_token"
+    t.datetime "reset_token_sent_at"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "advertisements", "users"
+  add_foreign_key "chat_rooms", "users", column: "user1_id"
+  add_foreign_key "chat_rooms", "users", column: "user2_id"
+  add_foreign_key "messages", "chat_rooms"
+  add_foreign_key "messages", "users"
 end

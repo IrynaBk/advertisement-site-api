@@ -28,4 +28,8 @@ class ApplicationController < ActionController::API
     return @current_user&.id == id
   end
 
+  def current_user
+    return @current_user
+  end
+
 end
