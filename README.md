@@ -1,24 +1,18 @@
-# README
+# Advertisement website REST API
+It's a Ruby on Rails API for advertisement website. User can signup, login, logout, manage profile information, browse all advertisements and sort them by location or category. Includes real-time 1-to-1 chat feature.
+Repository for [ReactJS frontend](https://github.com/IrynaBk/reactjs-advertisements).
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
 
-Things you may want to cover:
+## Installation
 
-* Ruby version
+Project requires [Ruby](https://rvm.io/rvm/install) version 3.2.2 to run.
+You must have postgres installed as well.
+For successful ActionCable work, you need to install [redis](https://redis.io/docs/getting-started/installation/) on your system.
 
-* System dependencies
+Install the dependencies  and start the server.
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+```sh
+bundle install
+rails s
+```
+If something went wrong, don't hesitate to ask me!

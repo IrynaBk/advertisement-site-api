@@ -15,8 +15,9 @@ class MessagesController < ApplicationController
   end
 
   def index
-    @messages = @chat_room.messages.includes(:user).as_json(include: { user: { only: :username } })
-    render json: @messages
+    @messages = @chat_room.messages.includes(:user).as_json(include: { user: { only: :id } })
+    user = @chat_room.user1.id != @current_user.id ? @chat_room.user1.as_json(only: [:id, :first_name, :last_name]) : @chat_room.user2.as_json(only: [:id, :first_name, :last_name])
+    render json: { messages: @messages, user: user }
   end
 
 

@@ -26,8 +26,17 @@ class ChatRoomsController < ApplicationController
   end
 
   def index
-    chat_rooms = ChatRoom.where('user1_id = ? OR user2_id = ?', current_user.id, current_user.id)
-    render json: chat_rooms.as_json(include: [:user1, :user2, :messages])
+    chat_rooms = ChatRoom.where('user1_id = ? OR user2_id = ?', @current_user.id, @current_user.id)
+    render json: chat_rooms.as_json({:include => { 
+      :user1 => { 
+        :only => [:id], 
+        :methods => [:full_name]
+      },
+      :user2 => { 
+        :only => [:id], 
+        :methods => [:full_name]
+      }
+    }})
   end
 
   private
