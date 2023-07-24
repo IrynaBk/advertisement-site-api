@@ -9,6 +9,6 @@ class UserMailer < ApplicationMailer
     private
 
   def password_reset_url(token)
-    "http://127.0.0.1:5173/reset_password/#{token}"
+    "http://127.0.0.1:3001/reset_password/#{token}"
   end
   end

@@ -17,11 +17,14 @@ class ApplicationController < ActionController::API
     end
   end
 
+  def another_user_id(chat_room)
+    current_user?(chat_room.user1_id) ? chat_room.user2_id : chat_room.user1_id
+  end
+
   def no_auth_request
     if @current_user.nil?
       render json: {error: "authorization required"}, status: :unauthorized
     end
-    render status: :ok
   end
 
   def current_user?(id)

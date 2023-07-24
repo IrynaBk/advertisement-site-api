@@ -24,7 +24,6 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     @user.image.attach(params[:image])
-    
     if @user.save
       render json: @user, status: :created
     else

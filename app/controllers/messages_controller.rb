@@ -6,6 +6,11 @@ class MessagesController < ApplicationController
   def create
     message = @chat_room.messages.new(message_params)
     message.user = current_user
+    message.unread = true
+    another_user = another_user_id(@chat_room)
+    if !ActionCable.server.pubsub.redis_connection_for_subscriptions.get("chat_#{@chat_room.id}_user_#{another_user}").nil?      
+      message.unread = false
+    end
     if message.save
       ActionCable.server.broadcast("chat_#{@chat_room.id}", message.as_json(include: { user: { only: :username } }))
       render json: message.as_json(include: :user), status: :created
@@ -17,6 +22,7 @@ class MessagesController < ApplicationController
   def index
     @messages = @chat_room.messages.includes(:user).as_json(include: { user: { only: :id } })
     user = @chat_room.user1.id != @current_user.id ? @chat_room.user1.as_json(only: [:id, :first_name, :last_name]) : @chat_room.user2.as_json(only: [:id, :first_name, :last_name])
+    @chat_room.messages.unread_by(current_user).update_all(unread: false)
     render json: { messages: @messages, user: user }
   end
 
