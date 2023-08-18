@@ -4,7 +4,6 @@ class ChatRoom < ApplicationRecord
   has_many :messages
   attr_accessor :current_user
 
-
   scope :between, -> (user1_id, user2_id) do
     where('(user1_id = ? AND user2_id = ?) OR (user1_id = ? AND user2_id = ?)', user1_id, user2_id, user2_id, user1_id).to_a.first
   end

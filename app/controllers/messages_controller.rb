@@ -20,10 +20,22 @@ class MessagesController < ApplicationController
   end
 
   def index
-    @messages = @chat_room.messages.includes(:user).as_json(include: { user: { only: :id } })
-    user = @chat_room.user1.id != @current_user.id ? @chat_room.user1.as_json(only: [:id, :first_name, :last_name]) : @chat_room.user2.as_json(only: [:id, :first_name, :last_name])
-    @chat_room.messages.unread_by(current_user).update_all(unread: false)
-    render json: { messages: @messages, user: user }
+      page_number = params[:page] || 1
+      last_message_timestamp = params[:last_message_timestamp]
+
+      if last_message_timestamp
+        @messages = @chat_room.messages.where("created_at < ?", last_message_timestamp).order(created_at: :desc).paginate(page: page_number, per_page: 30)
+      else
+        @messages = @chat_room.messages.order(created_at: :desc).paginate(page: page_number, per_page: 30)
+      end
+  
+      @messages = @messages.includes(:user).as_json(include: { user: { only: :id } })
+    
+      user = @chat_room.user1.id != @current_user.id ? @chat_room.user1.as_json(only: [:id, :first_name, :last_name]) : @chat_room.user2.as_json(only: [:id, :first_name, :last_name])
+    
+      @chat_room.messages.unread_by(current_user).update_all(unread: false)
+    
+      render json: { messages: @messages.reverse, user: user }
   end
 
 
