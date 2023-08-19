@@ -1,18 +1,42 @@
-# Advertisement website REST API
-It's a Ruby on Rails API for advertisement website. User can signup, login, logout, manage profile information, browse all advertisements and sort them by location or category. Includes real-time 1-to-1 chat feature.
-Repository for [ReactJS frontend](https://github.com/IrynaBk/reactjs-advertisements).
+# Advertisement Website Backend (Ruby on Rails)
 
+Welcome to the backend repository for our Advertisement Website. Built using Ruby on Rails, this platform offers the capability to create user accounts, manage advertisements, and chat in real-time.
 
-## Installation
+## Features
 
-Project requires [Ruby](https://rvm.io/rvm/install) version 3.2.2 to run.
-You must have postgres installed as well.
-For successful ActionCable work, you need to install [redis](https://redis.io/docs/getting-started/installation/) on your system.
+1. **User Authentication**:
+   - Register an account.
+   - Add an optional profile picture during registration, leveraging Active Storage.
+   
+2. **Advertisements**:
+   - Users can create their own advertisements.
+   - Browse available advertisements by:
+     - Location
+     - Category
 
-Install the dependencies  and start the server.
+3. **Real-time 1:1 Chat**:
+   - Leveraging Action Cable and Redis, the platform supports real-time one-on-one chatting between users.
 
-```sh
-bundle install
-rails s
-```
-If something went wrong, don't hesitate to ask me!
+## Technical Stack
+
+- **Framework**: Ruby on Rails
+- **Database**: PostgreSQL
+- **File Storage**: Active Storage (for profile pictures and other attachments)
+- **Real-time Communication**: Action Cable and Redis
+
+## Setup & Installation
+
+### Prerequisites
+
+Ensure you have the following installed:
+
+- Ruby
+- PostgreSQL
+- Redis
+
+### Steps:
+
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+
