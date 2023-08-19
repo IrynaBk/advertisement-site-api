@@ -6,7 +6,7 @@ Welcome to the backend repository for our Advertisement Website. Built using Rub
 
 1. **User Authentication**:
    - Register an account.
-   - Add an optional profile picture during registration, leveraging Active Storage.
+   - Add an optional profile picture during registration, leveraging Active Storage and S3 amazon bucket.
    
 2. **Advertisements**:
    - Users can create their own advertisements.
@@ -38,5 +38,5 @@ Ensure you have the following installed:
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/IrynaBk/advertisement-site-api.git
 
