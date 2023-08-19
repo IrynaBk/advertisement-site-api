@@ -23,7 +23,7 @@ class UsersController < ApplicationController
   # POST /users
   def create
     @user = User.new(user_params)
-    @user.image.attach(params[:image])
+    @user.image.attach(params[:image]) if params[:image].present?
     if @user.save
       render json: @user, status: :created
     else
